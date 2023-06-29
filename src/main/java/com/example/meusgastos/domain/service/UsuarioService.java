@@ -70,14 +70,15 @@ public class UsuarioService implements ICRUDService<UsuarioRequestDTO, UsuarioRe
 
     @Override
     public UsuarioResponseDTO atualizar(Long id, UsuarioRequestDTO dto) {
-        obterPorId(id);
+        UsuarioResponseDTO usuarioBanco = obterPorId(id);
         /*
-         * Se quiser implementar verificação certa de email, pode se busca o email, que já vai estar cadastrado. Aì o certo é verificar se o email está em outro id, ou seja, é de outro usuário, se os ids forem diferentes não permitir atualização, se for igual permitir.
-         */
+        * Se quiser implementar verificação certa de email, pode se busca o email, que já vai estar cadastrado. Aì o certo é verificar se o email está em outro id, ou seja, é de outro usuário, se os ids forem diferentes não permitir atualização, se for igual permitir.
+        */
         if (dto.getEmail() == null || dto.getSenha() == null){
             throw new BadRequestException("Email e Senha são obrigatórios!");
         }
         Usuario usuario = mapper.map(dto, Usuario.class);
+        usuario.setDataCadastro(usuarioBanco.getDataCadastro());
         usuario.setId(id);
         usuario = usuarioRepository.save(usuario);
         return mapper.map(usuario, UsuarioResponseDTO.class);
