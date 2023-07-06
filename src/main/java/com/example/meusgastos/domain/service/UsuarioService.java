@@ -9,8 +9,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.meusgastos.domain.dto.UsuarioRequestDTO;
-import com.example.meusgastos.domain.dto.UsuarioResponseDTO;
+import com.example.meusgastos.domain.dto.usuario.UsuarioRequestDTO;
+import com.example.meusgastos.domain.dto.usuario.UsuarioResponseDTO;
 import com.example.meusgastos.domain.exception.BadRequestException;
 import com.example.meusgastos.domain.exception.ResourceNotFoundException;
 import com.example.meusgastos.domain.model.Usuario;
