@@ -8,12 +8,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
 import com.example.meusgastos.domain.model.Usuario;
-import com.fasterxml.jackson.core.StreamReadConstraints.Builder;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-
+// pode ser importada em qualquer lugar
 @Component
 public class JwtUtil {
     @Value("${auth.jwt.secret}")
@@ -21,9 +20,9 @@ public class JwtUtil {
     @Value("${jwtExpirationMilliseg}")
     private Long jwtExpirationMilliseg;
 
-    public String gerarToken(Authentication authecation) {
+    public String gerarToken(Authentication authentication) {
         Date dataExpiracao = new Date(new Date().getTime() + jwtExpirationMilliseg);
-        Usuario usuario = (Usuario) authecation.getPrincipal();
+        Usuario usuario = (Usuario) authentication.getPrincipal();
         try {
             Key secretKey = Keys.hmacShaKeyFor(jwtSecret.getBytes("UTF-8"));
             return Jwts.builder()
@@ -39,7 +38,7 @@ public class JwtUtil {
     }
 
     // O claims destrincha o token e retorna para usar na getUserName e
-    // isValidNumber
+    // isValidToken
     private Claims getClaims(String token) {
         try {
             Key secretKey = Keys.hmacShaKeyFor(jwtSecret.getBytes("UTF-8"));
@@ -48,6 +47,7 @@ public class JwtUtil {
             .build()
             .parseClaimsJws(token)
             .getBody();
+            return claims;
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return null;
@@ -59,10 +59,11 @@ public class JwtUtil {
         if(claims == null) {
             return "";
         }
+        // foi o que a gente salvou
         return claims.getSubject();
     }
 
-    public boolean isValidNumber(String token) {
+    public boolean isValidToken(String token) {
         Claims claims = getClaims(token);
         if(claims == null) {
             return false;

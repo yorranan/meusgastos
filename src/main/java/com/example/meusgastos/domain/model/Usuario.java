@@ -1,11 +1,11 @@
 package com.example.meusgastos.domain.model;
 
-//import java.util.Collection;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-/* import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails; */
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,7 +15,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
 @Entity
-public class Usuario /*implements UserDetails*/{
+public class Usuario implements UserDetails{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idUsuario")
@@ -32,8 +32,6 @@ public class Usuario /*implements UserDetails*/{
     private Date dataInativacao;
     @OneToMany(mappedBy = "usuario")
     private List<Titulo> titulos;
-
-//GERAR UMA AÇÃO PARA OS GETS E SETS.
 
     public Long getId() {
         return id;

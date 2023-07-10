@@ -53,7 +53,8 @@ public class UsuarioService implements ICRUDService<UsuarioRequestDTO, UsuarioRe
             throw new BadRequestException("Email e Senha são obrigatórios!");
         }
         Optional<Usuario> optUsuario = usuarioRepository.findByEmail(dto.getEmail());
-        if(optUsuario.isPresent()) {
+        // Coloquei o ! depois de ver o código do Daniel, mas não tenho certeza
+        if(!optUsuario.isPresent()) {
             throw new BadRequestException("Já existe um usuário cadastrado com esse email" + dto.getEmail());
         }
         Usuario usuario = mapper.map(dto, Usuario.class);

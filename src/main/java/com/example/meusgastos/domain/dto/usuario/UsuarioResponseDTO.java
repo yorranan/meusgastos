@@ -1,4 +1,4 @@
-package com.example.meusgastos.domain.dto;
+package com.example.meusgastos.domain.dto.usuario;
 
 import java.util.Date;
 

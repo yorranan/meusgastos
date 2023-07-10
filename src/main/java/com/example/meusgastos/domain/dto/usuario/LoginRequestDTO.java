@@ -3,7 +3,7 @@ package com.example.meusgastos.domain.dto.usuario;
 public class LoginRequestDTO {
     private String email;
     private String senha;
-    
+
     public String getEmail() {
         return email;
     }
@@ -16,6 +16,4 @@ public class LoginRequestDTO {
     public void setSenha(String senha) {
         this.senha = senha;
     }
-
-    
 }

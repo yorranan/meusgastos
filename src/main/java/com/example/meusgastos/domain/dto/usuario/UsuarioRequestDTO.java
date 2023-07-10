@@ -1,10 +1,27 @@
-package com.example.meusgastos.domain.dto;
+package com.example.meusgastos.domain.dto.usuario;
+
+import java.util.Date;
 
 public class UsuarioRequestDTO {
     private String nome;
     private String email;
     private String senha;
     private String foto;
+    private Date dataCadastro;
+    private Date dataInativacao;
+
+    public Date getDataInativacao() {
+        return dataInativacao;
+    }
+    public void setDataInativacao(Date dataInativacao) {
+        this.dataInativacao = dataInativacao;
+    }
+    public Date getDataCadastro() {
+        return dataCadastro;
+    }
+    public void setDataCadastro(Date dataCadastro) {
+        this.dataCadastro = dataCadastro;
+    }
 
     public String getNome() {
         return nome;
