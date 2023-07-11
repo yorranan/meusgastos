@@ -12,41 +12,31 @@ import com.example.meusgastos.domain.model.Usuario;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-// pode ser importada em qualquer lugar
+
 @Component
 public class JwtUtil {
     @Value("${auth.jwt.secret}")
-    private String jwtSecret;
-    @Value("${jwtExpirationMilliseg}")
+    private String jwtsecret;
+    @Value("${auth.jwt-expiration-milliseg}")
     private Long jwtExpirationMilliseg;
 
     public String gerarToken(Authentication authentication) {
         Date dataExpiracao = new Date(new Date().getTime() + jwtExpirationMilliseg);
-        Usuario usuario = (Usuario) authentication.getPrincipal();
+        Usuario usuario = (Usuario)authentication.getPrincipal();
+
         try {
-            Key secretKey = Keys.hmacShaKeyFor(jwtSecret.getBytes("UTF-8"));
-            return Jwts.builder()
-            .setSubject(usuario.getUsername())
-            .setIssuedAt(new Date())
-            .setExpiration(dataExpiracao)
-            .signWith(secretKey)
-            .compact();
+            Key secretKey = Keys.hmacShaKeyFor(jwtsecret.getBytes("UTF-8"));
+            return Jwts.builder().setSubject(usuario.getUsername()).setIssuedAt(new Date()).setExpiration(dataExpiracao).signWith(secretKey).compact();
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return "";
         }
     }
 
-    // O claims destrincha o token e retorna para usar na getUserName e
-    // isValidToken
     private Claims getClaims(String token) {
         try {
-            Key secretKey = Keys.hmacShaKeyFor(jwtSecret.getBytes("UTF-8"));
-            Claims claims = Jwts.parserBuilder()
-            .setSigningKey(secretKey)
-            .build()
-            .parseClaimsJws(token)
-            .getBody();
+            Key secretKey = Keys.hmacShaKeyFor(jwtsecret.getBytes("UTF-8"));
+            Claims claims = Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody();
             return claims;
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -56,7 +46,8 @@ public class JwtUtil {
 
     public String getUserName(String token) {
         Claims claims = getClaims(token);
-        if(claims == null) {
+
+        if (claims == null) {
             return "";
         }
         // foi o que a gente salvou
@@ -65,16 +56,19 @@ public class JwtUtil {
 
     public boolean isValidToken(String token) {
         Claims claims = getClaims(token);
-        if(claims == null) {
+
+        if (claims == null) {
             return false;
         }
+
         String email = claims.getSubject();
         Date dataExpiracao = claims.getExpiration();
         Date agora = new Date(System.currentTimeMillis());
-        if((email != null) && (agora.before(dataExpiracao))) {
+
+        if ((email != null) && (agora.before(dataExpiracao))) {
             return true;
         }
+
         return false;
     }
-
 }

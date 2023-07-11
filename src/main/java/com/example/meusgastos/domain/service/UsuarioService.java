@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.meusgastos.domain.dto.usuario.UsuarioRequestDTO;
@@ -23,6 +24,8 @@ public class UsuarioService implements ICRUDService<UsuarioRequestDTO, UsuarioRe
     private UsuarioRepository usuarioRepository;
     @Autowired
     private ModelMapper mapper;
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public List<UsuarioResponseDTO> obterTodos() {
@@ -49,25 +52,23 @@ public class UsuarioService implements ICRUDService<UsuarioRequestDTO, UsuarioRe
 
     @Override
     public UsuarioResponseDTO cadastrar(UsuarioRequestDTO dto) {
-        if (dto.getEmail() == null || dto.getSenha() == null){
-            throw new BadRequestException("Email e Senha são obrigatórios!");
-        }
+        if(dto.getEmail() == null || dto.getSenha() == null){
+            throw new BadRequestException("Email e Senha são Obrigatórios!");
+        }//criar método para não repetir código
         Optional<Usuario> optUsuario = usuarioRepository.findByEmail(dto.getEmail());
-        // Coloquei o ! depois de ver o código do Daniel, mas não tenho certeza
-        if(!optUsuario.isPresent()) {
-            throw new BadRequestException("Já existe um usuário cadastrado com esse email" + dto.getEmail());
+        if(optUsuario.isPresent()){
+            throw new BadRequestException("Já existe um usuário cadastro com esse email: " + dto.getEmail());
         }
         Usuario usuario = mapper.map(dto, Usuario.class);
-        usuario.setDataCadastro(new Date());
-        /*
-         * A linha abaixo pode ser também escrita da seguinte forma (não necessita declarar
-         * outra váriavel)
-         * usuario = usuarioRepository.save(usuario);
-            return mapper.map(usuario, UsuarioResponseDTO.class);
-         */
-        Usuario usuarioRetorno = usuarioRepository.save(usuario);
-        return mapper.map(usuarioRetorno, UsuarioResponseDTO.class);
+        // Encriptografando senha:
+        String senha = passwordEncoder.encode(usuario.getSenha());
+        usuario.setSenha(senha);
+        usuario.setId(null);
+        usuario.setDataCadastro(new Date());  
+        usuario = usuarioRepository.save(usuario);
+        return mapper.map(usuario, UsuarioResponseDTO.class);
     }
+
 
     @Override
     public UsuarioResponseDTO atualizar(Long id, UsuarioRequestDTO dto) {
@@ -80,7 +81,10 @@ public class UsuarioService implements ICRUDService<UsuarioRequestDTO, UsuarioRe
         }
         Usuario usuario = mapper.map(dto, Usuario.class);
         usuario.setDataCadastro(usuarioBanco.getDataCadastro());
-        usuario.setId(id);
+        usuario.setSenha(dto.getSenha());
+        usuario.setId(id);  
+        usuario.setDataCadastro(usuarioBanco.getDataCadastro());
+        usuario.setDataInativacao(usuarioBanco.getDataInativacao());
         usuario = usuarioRepository.save(usuario);
         return mapper.map(usuario, UsuarioResponseDTO.class);
     }

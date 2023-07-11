@@ -12,7 +12,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
@@ -33,6 +32,7 @@ public class WebSecurityConfig {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         http.headers().frameOptions().disable().and()
         .cors().and()
@@ -46,6 +46,5 @@ public class WebSecurityConfig {
 
         return http.build();
     }
-
-
 }
+
