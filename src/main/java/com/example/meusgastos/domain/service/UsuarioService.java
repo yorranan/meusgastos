@@ -99,7 +99,7 @@ public class UsuarioService implements ICRUDService<UsuarioRequestDTO, UsuarioRe
         // INATIVAR
         Optional<Usuario> optUsuario = usuarioRepository.findById(id);
         if(optUsuario.isEmpty()) {
-
+            throw new ResourceNotFoundException("Não foi possível encontrar o usuário com o id " + id);
         }
         Usuario usuario = optUsuario.get();
         usuario.setDataInativacao(new Date());
