@@ -22,6 +22,5 @@ public class CentroDeCustoRequestDTO {
     }
     public void setObservacao(String observacao) {
         this.observacao = observacao;
-    }
-    
+    }    
 }

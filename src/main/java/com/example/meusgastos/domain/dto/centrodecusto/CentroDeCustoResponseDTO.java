@@ -3,13 +3,13 @@ package com.example.meusgastos.domain.dto.centrodecusto;
 public class CentroDeCustoResponseDTO {
     private Long id;
     private String descricao;
-    private String observacao;
-    
-    public Long getId() {
-        return id;
+    private String observacao;  
+
+    public String getObservacao() {
+        return observacao;
     }
-    public void setId(Long id) {
-        this.id = id;
+    public void setObservacao(String observacao) {
+        this.observacao = observacao;
     }
     public String getDescricao() {
         return descricao;
@@ -17,10 +17,13 @@ public class CentroDeCustoResponseDTO {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
-    public String getObservacao() {
-        return observacao;
+
+    public Long getId() {
+        return id;
     }
-    public void setObservacao(String observacao) {
-        this.observacao = observacao;
+    public void setId(Long id) {
+        this.id = id;
     }
+ 
 }
+

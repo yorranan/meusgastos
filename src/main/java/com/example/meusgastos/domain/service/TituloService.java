@@ -39,7 +39,7 @@ public class TituloService implements ICRUDService<TituloRequestDTO, TituloRespo
         if (optTitulo.isEmpty()) {
             throw new ResourceNotFoundException("Não foi possível encontrar o título com o id: " + id);
         }
-        return mapper.map(optTitulo, TituloResponseDTO.class);
+        return mapper.map(optTitulo.get(), TituloResponseDTO.class);
     }
 
     @Override
@@ -80,5 +80,13 @@ public class TituloService implements ICRUDService<TituloRequestDTO, TituloRespo
             throw new BadRequestException("Titulo Inválido - Campos obrigatórios");//
         }
     }
+
+    public List<TituloResponseDTO> obterPorDataDeVencimento(String periodoInicial, String periodoFinal){
+        List<Titulo> titulos = tituloRepository.obterFluxoCaixaPorDataVencimento(periodoInicial, periodoFinal);
+        return titulos.stream()
+        .map(titulo -> mapper.map(titulo, TituloResponseDTO.class))
+        .collect(Collectors.toList());
+    }
+
     
 }

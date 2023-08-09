@@ -15,7 +15,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="centrodecustos")
+@Table(name="centrodecusto")
 public class CentroDeCusto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +28,7 @@ public class CentroDeCusto {
     @ManyToOne
     @JoinColumn(name = "idUsuario")
     private Usuario usuario;
-    @ManyToMany(mappedBy = "centrosDeCustos")
+    @ManyToMany(mappedBy = "centroDeCusto")
     @JsonBackReference
     private List<Titulo> titulos;
 

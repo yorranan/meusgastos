@@ -15,11 +15,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.meusgastos.domain.service.CentroDeCustoService;
 import com.example.meusgastos.domain.dto.centrodecusto.CentroDeCustoRequestDTO;
 import com.example.meusgastos.domain.dto.centrodecusto.CentroDeCustoResponseDTO;
-import com.example.meusgastos.domain.service.CentroDeCustoService;
 
-//Libera acesso para fazer requisição do tipo CORS, não lida com autenticação
 @CrossOrigin("*")
 @RestController
 @RequestMapping("/api/centrodecustos")
@@ -28,27 +27,29 @@ public class CentroDeCustoController {
     private CentroDeCustoService centroDeCustoService;
 
     @GetMapping
-    public ResponseEntity<List<CentroDeCustoResponseDTO>> obterTodos() {
+    public ResponseEntity<List<CentroDeCustoResponseDTO>> obterTodos(){
         return ResponseEntity.ok(centroDeCustoService.obterTodos());
     }
+
     @GetMapping("/{id}")
-    public ResponseEntity<CentroDeCustoResponseDTO> obterPorId(@PathVariable Long id) {
+    public ResponseEntity<CentroDeCustoResponseDTO> obterPorId(@PathVariable Long id){
         return ResponseEntity.ok(centroDeCustoService.obterPorId(id));
     }
     @PostMapping
-    public ResponseEntity<CentroDeCustoResponseDTO> cadastrar(@RequestBody CentroDeCustoRequestDTO dto) {
+    public ResponseEntity<CentroDeCustoResponseDTO> cadastrar(@RequestBody CentroDeCustoRequestDTO dto){
         CentroDeCustoResponseDTO centroDeCusto = centroDeCustoService.cadastrar(dto);
         return new ResponseEntity<>(centroDeCusto, HttpStatus.CREATED);
     }
+
     @PutMapping("/{id}")
-    public ResponseEntity<CentroDeCustoResponseDTO> atualizar(@PathVariable Long id, @RequestBody CentroDeCustoRequestDTO dto) {
+    public ResponseEntity<CentroDeCustoResponseDTO> atualizar(@PathVariable Long id, @RequestBody CentroDeCustoRequestDTO dto){
         CentroDeCustoResponseDTO centroDeCusto = centroDeCustoService.atualizar(id, dto);
-        return new ResponseEntity<CentroDeCustoResponseDTO>(centroDeCusto, HttpStatus.OK); 
+        return ResponseEntity.ok(centroDeCusto);
     }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletar(@PathVariable Long id) {
+    public ResponseEntity<?> deletar(@PathVariable Long id){
         centroDeCustoService.deletar(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
 }
